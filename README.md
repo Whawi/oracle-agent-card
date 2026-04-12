@@ -26,4 +26,5 @@ https://docs.whaber.ai/oracle
 
 ## Contact
 - Technical: oracle@whaber.ai
-- Partnerships: partnerships@whaber.ai
+- Partnerships: partnerships@whaber.ai  ---
+*Last updated: 2026-04-12 - Trigger deployment*
