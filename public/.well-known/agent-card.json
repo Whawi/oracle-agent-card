@@ -1,0 +1,439 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "id": "whaber/oracle-latam",
+  "humanReadableId": "whaber-oracle-latam",
+  "version": "1.0.0",
+  "name": "Whaber Oracle - Latin America Travel-Ops Intelligence",
+  "description": "Agent-to-Agent discovery card for Whaber Oracle MCP Server. Provides verified ground truth for safe pickup points, carrier compliance, operational timing windows, and hotel context across Latin American cities. Partner-Only soft launch Q2 2026. Layer 4 execution intelligence.",
+  "compatibilityLevel": "hybrid-a2a-mcp-whaber",
+  "discoveryMethods": [
+    "a2a-registry",
+    "mcp-registry",
+    "dns-well-known",
+    "nanda-mit-index"
+  ],
+  "discoveryPath": "/.well-known/agent-card.json",
+  "canonicalUrl": "https://oracle.whaber.ai/.well-known/agent-card.json",
+  "alternateUrls": [
+    "https://docs.whaber.ai/.well-known/agent-card.json",
+    "https://status.whaber.ai/.well-known/agent-card.json"
+  ],
+  "vendor": {
+    "name": "Whaber (Inspire Travellers S.A.)",
+    "domain": "whaber.ai",
+    "contact": {
+      "email": "oracle@whaber.ai",
+      "support": "soporte@whaber.ai",
+      "technical": "cv@whaber.ai"
+    },
+    "website": "https://whaber.ai",
+    "documentation": "https://docs.whaber.ai/oracle",
+    "status": "https://status.whaber.ai"
+  },
+  "geographicScope": {
+    "primary": [
+      "EC",
+      "CO",
+      "PE",
+      "CL"
+    ],
+    "cities": [
+      "Quito",
+      "Guayaquil",
+      "Bogotá"
+    ],
+    "expansion": "latam-sequential-2026-2027"
+  },
+  "businessModel": {
+    "type": "outcome-based-success-fee",
+    "discoveryCallCost": "$0.05 USD",
+    "successFeeRange": "$1.50-$3.00 USD per completed transfer",
+    "monetizationTarget": "hotel-labor-budget-displacement",
+    "positioning": "autopilot-not-copilot"
+  },
+  "dataGovernance": {
+    "moatProtection": "permanent-asymmetric-context",
+    "neverExposedFields": [
+      "risk_index",
+      "safety_score",
+      "safety_margin",
+      "carrier_scoring",
+      "traffic_weight_raw",
+      "incident_history",
+      "commercial_margins"
+    ],
+    "compliance": [
+      "LOPDP-Ecuador",
+      "sandboxing-enforced",
+      "HITL-irreversible-actions"
+    ]
+  },
+  "launchPhase": {
+    "current": "partner-only-q2-2026",
+    "freemiumTiered": "q3-2026-post-nsm",
+    "nsmGate": "50-autonomous-transfers-quito-csat-90"
+  },
+  "registries": {
+    "target": [
+      "MIT Nanda Agent Index",
+      "Anthropic MCP Registry",
+      "Google A2A Registry"
+    ],
+    "preventiveRegistration": "pre-sabre-marketplace-q2-2026"
+  },
+  "capabilities": [
+    {
+      "id": "whaber_get_safe_pickup_point",
+      "name": "Get Safe Pickup Point",
+      "description": "Returns verified pickup coordinates with municipal compliance, safety scoring by time window, carrier restrictions, and operational instructions for a given location.",
+      "category": "place-graph-query",
+      "protocol": [
+        "mcp",
+        "streamable-http",
+        "rest"
+      ],
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "place_id": {
+            "type": "string",
+            "description": "Whaber Place Graph node ID (e.g., quito_aeropuerto_uio, quito_ibis_hotel)"
+          },
+          "arrival_datetime_utc": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp for pickup timing calculation"
+          },
+          "passenger_count": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 15
+          }
+        },
+        "required": [
+          "place_id",
+          "arrival_datetime_utc"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "pickup_point": {
+            "type": "object",
+            "properties": {
+              "coordinates": {
+                "type": "object",
+                "properties": {
+                  "lat": {
+                    "type": "number"
+                  },
+                  "lng": {
+                    "type": "number"
+                  }
+                }
+              },
+              "zone_name": {
+                "type": "string"
+              },
+              "instructions": {
+                "type": "string"
+              }
+            }
+          },
+          "municipal_compliance": {
+            "type": "object",
+            "properties": {
+              "authorized": {
+                "type": "boolean"
+              },
+              "restrictions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "time_window": {
+            "type": "object",
+            "properties": {
+              "earliest_pickup_utc": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "latest_pickup_utc": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "whaber_validate_carrier_compliance",
+      "name": "Validate Carrier Compliance",
+      "description": "Checks if a carrier meets municipal licensing, insurance, vehicle type, and operational requirements for a specific route and time window.",
+      "category": "compliance-verification",
+      "protocol": [
+        "mcp",
+        "streamable-http",
+        "rest"
+      ],
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "carrier_id": {
+            "type": "string"
+          },
+          "origin_place_id": {
+            "type": "string"
+          },
+          "destination_place_id": {
+            "type": "string"
+          },
+          "service_datetime_utc": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "carrier_id",
+          "origin_place_id",
+          "destination_place_id"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "compliant": {
+            "type": "boolean"
+          },
+          "licenses": {
+            "type": "object",
+            "properties": {
+              "ant_certificate": {
+                "type": "boolean"
+              },
+              "municipal_permit": {
+                "type": "boolean"
+              },
+              "insurance_valid": {
+                "type": "boolean"
+              }
+            }
+          },
+          "restrictions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "whaber_calculate_ops_window",
+      "name": "Calculate Operational Window",
+      "description": "Computes safe operational timing window including traffic conditions, buffer margins, carrier prep time, and municipal curfews.",
+      "category": "timing-intelligence",
+      "protocol": [
+        "mcp",
+        "streamable-http",
+        "rest"
+      ],
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "flight_arrival_utc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "destination_place_id": {
+            "type": "string"
+          },
+          "passenger_count": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "flight_arrival_utc",
+          "destination_place_id"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "recommended_pickup_utc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "earliest_safe_pickup_utc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "latest_safe_pickup_utc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "buffer_minutes": {
+            "type": "integer"
+          },
+          "factors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "whaber_query_place_safety",
+      "name": "Query Place Safety",
+      "description": "Returns safety conditions for a place at a specific time window, including risk classification and recommended precautions.",
+      "category": "safety-intelligence",
+      "protocol": [
+        "mcp",
+        "streamable-http",
+        "rest"
+      ],
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "place_id": {
+            "type": "string"
+          },
+          "datetime_utc": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "place_id",
+          "datetime_utc"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "risk_classification": {
+            "type": "string",
+            "enum": [
+              "low",
+              "moderate",
+              "elevated",
+              "high"
+            ]
+          },
+          "recommended_precautions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "municipal_alerts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "whaber_get_hotel_context",
+      "name": "Get Hotel Context",
+      "description": "Returns hotel-specific operational context including partnership status, preferred carriers, special instructions, and historical performance data.",
+      "category": "hotel-intelligence",
+      "protocol": [
+        "mcp",
+        "streamable-http",
+        "rest"
+      ],
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "hotel_place_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "hotel_place_id"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "partnership_status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "pilot",
+              "prospective",
+              "none"
+            ]
+          },
+          "preferred_carriers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "special_instructions": {
+            "type": "string"
+          },
+          "pickup_zones": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "zone_name": {
+                  "type": "string"
+                },
+                "coordinates": {
+                  "type": "object",
+                  "properties": {
+                    "lat": {
+                      "type": "number"
+                    },
+                    "lng": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "protocolSupport": {
+    "primary": "mcp-1.0",
+    "additional": [
+      "streamable-http",
+      "rest-api"
+    ],
+    "moatStrategy": "protocol-agnostic-same-json"
+  },
+  "architecturalPrinciples": {
+    "p1": "intentional-context-asymmetry",
+    "p2": "eager-loading-place-graph",
+    "p3": "whatsapp-as-inference-runtime",
+    "p4": "place-graph-as-structured-memory",
+    "p5": "governance-as-b2b-sales-feature",
+    "p6": "monetize-outcome-not-access",
+    "p7": "sequencing-as-capital-discipline"
+  },
+  "competitivePositioning": {
+    "layer": "layer-4-execution-intelligence",
+    "complementaryTo": [
+      "Layer 1: Booking.com, Expedia",
+      "Layer 2: Amadeus, Sabre",
+      "Layer 3: Travel Hub, Moltravel"
+    ],
+    "moat": "15-years-aerocar-operational-knowledge-codified-as-place-graph",
+    "unforkable": "place-graph-data-built-transfer-by-transfer"
+  }
+}
