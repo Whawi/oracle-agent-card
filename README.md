@@ -1,33 +1,48 @@
 # Whaber Oracle Agent Card
 
-Discovery document for Whaber Oracle MCP Server.
+Ground truth operational layer for urban transfers in Latin America.
 
-**Canonical URL:** https://oracle.whaber.ai/.well-known/agent-card.json
+## Live Endpoint
 
-**Status:** Partner-Only Soft Launch (Q2 2026)
+https://oracle.whaber.ai/.well-known/agent-card.json
 
-## Compatibility
-- MIT Nanda Registry
-- Anthropic MCP Registry  
-- Google A2A Protocol
+## What is Whaber Oracle?
 
-## Oracle MCP Server
-Verified operational infrastructure providing ground truth for safe, compliant ground transportation execution in Latin America.
+Whaber Oracle is the Layer 4 execution infrastructure for travel AI in LatAm — the layer between a booking and a verified ground transfer.
 
-**5 Core Tools:**
-- `whaber_get_safe_pickup_point`
-- `whaber_calculate_ops_window`
-- `whaber_validate_carrier_compliance`
-- `whaber_query_place_safety`
-- `whaber_get_hotel_context`
+Any A2A-compatible agent can discover and consume the Oracle via the canonical endpoint above.
 
-## Documentation
-https://docs.whaber.ai/oracle
+## 5 Core Tools — Agent Kit v1 (Partner-Only)
 
+| Tool | Description |
+|------|-------------|
+| whaber_get_safe_pickup_point | Physically verified pickup point for a hotel or airport in Quito |
+| whaber_calculate_ops_window | Operational time window with Quito traffic buffers and ANT compliance |
+| whaber_validate_carrier_compliance | ANT operating permit validation for Ecuador carriers |
+| whaber_query_place_safety | Zone safety classification (safe / caution / avoid) for a time window |
+| whaber_get_hotel_context | Operational context for hotels registered in the Place Graph |
 
+## Place Graph
 
+- 17 zones with full operational cataloging — Quito, Ecuador
+- Latency p95: less than 50ms
+- Safety scores recomputed automatically via driver field reports
+- Numeric scores never exposed — semantic labels only
 
-## Contact
-- Technical: oracle@whaber.ai
-- Partnerships: partnerships@whaber.ai  ---
-*Last updated: 2026-04-12 - Trigger deployment*
+## Security and Compliance
+
+- Authentication: Bearer token required
+- HTTPS: TLS via Cloudflare
+- Ecuador LOPDP compliant
+- ANT carrier verification
+- 6-gate validation pipeline
+- Full audit trail via EventStore
+
+## Active Pilot
+
+NH Collection Quito.
+Partner-Only soft launch Q2 2026.
+
+---
+
+Whaber Travel-Ops · oracle@whaber.ai · https://whaber.ai
